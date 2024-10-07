@@ -40,13 +40,14 @@ jobs:
     needs: build-and-push-docker
 
     steps:
+      # Step 5: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 5: Deploy Backend and Frontend
+      # Step 6: SSH and Deploy Backend and Frontend with Corrected SSH Options
       - name: SSH and Deploy Backend and Frontend
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -t ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             # Pull the latest Docker images
             docker pull ${{ secrets.DOCKER_USERNAME }}/mern-backend:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/mern-frontend:latest
